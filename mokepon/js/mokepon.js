@@ -37,6 +37,15 @@ let inputHipodoge
 let inputCapipepo
 let inputRatigueya
 
+let inputdragonite
+let inputpichoto
+let inputespean
+
+let inputgengar
+let inputnewtwo
+let inputtiranitar
+
+
 let botonTierra
 let botonFuego
 let botonAgua
@@ -78,6 +87,14 @@ let hipodoge = new Mokepon('Hipodoge', './assets/blue_po_2_portada.png', 5)
 let capipepo = new Mokepon('Capipepo', './assets/gree_po_2_portada.png', 5)
 let ratigueya = new Mokepon('Ratigueya', './assets/fire_po_2_portada.png', 5)
 
+let dragonite = new Mokepon('dragonite', './assets/fire_po_2_portada.png', 5)
+let pichoto = new Mokepon('pichoto', './assets/fire_po_2_portada.png', 5)
+let espean = new Mokepon('espean', './assets/fire_po_2_portada.png', 5)
+
+let gengar = new Mokepon('gengar', './assets/fire_po_2_portada.png', 5)
+let newtwo = new Mokepon('newtwo', './assets/fire_po_2_portada.png', 5)
+let tiranitar = new Mokepon('tiranitar', './assets/fire_po_2_portada.png', 5)
+
 //Definiendo los arreglos en los pokemones
 hipodoge.ataques.push(
     {nombre:'💧',id:'boton-agua'},
@@ -101,8 +118,67 @@ ratigueya.ataques.push(
     {nombre:'🌱',id:'boton-tierra'},
     )
 
-mokepones.push(hipodoge, capipepo, ratigueya);
-console.log(hipodoge);
+//Definiendo los arreglos en los pokemones
+dragonite.ataques.push(
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+    )
+pichoto.ataques.push(
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    )
+espean.ataques.push(
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+    )
+
+    //Definiendo los arreglos en los pokemones
+gengar.ataques.push(
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+    )
+newtwo.ataques.push(
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    )
+tiranitar.ataques.push(
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+    )
+
+mokepones.push(
+    //originales
+        hipodoge, 
+        capipepo, 
+        ratigueya,
+    //2er generacion
+        dragonite, 
+        pichoto, 
+        espean,
+    //3er generacion
+        gengar, 
+        newtwo, 
+        tiranitar
+    );
+console.log(mokepones);
 
 /************[ Inicia del Juego ]***************/
 function iniciarJuego() {
@@ -137,7 +213,15 @@ function iniciarJuego() {
     inputHipodoge = document.getElementById('Hipodoge')
     inputCapipepo = document.getElementById('Capipepo')
     inputRatigueya = document.getElementById('Ratigueya')
-        
+
+    inputdragonite = document.getElementById('dragonite')
+    inputpichoto = document.getElementById('pichoto')
+    inputespean = document.getElementById('espean')
+
+    inputgengar = document.getElementById('gengar')
+    inputnewtwo = document.getElementById('newtwo')
+    inputtiranitar = document.getElementById('tiranitar')
+
     botonMascotaJugador.addEventListener('click', seleccionarMascotaJugador)
     botonReiniciar.addEventListener('click', reiniciarJuego)
 }
@@ -156,9 +240,6 @@ function iniciarJuego() {
 function seleccionarMascotaJugador() {
     console.log("fun --> seleccionarMascotaJugador()");
 
-    sectionSeleccionarMascota.style.display = 'none'
-    sectionSeleccionarAtaque.style.display = 'flex'
-
     mascotaJugadorSelecionado = "";
     
     if (inputHipodoge.checked) {
@@ -170,14 +251,42 @@ function seleccionarMascotaJugador() {
     } else if (inputRatigueya.checked) {
         spanMascotaJugador.innerHTML = inputRatigueya.id
         mascotaJugadorSelecionado = inputRatigueya.id
+    
+    } else if (inputdragonite.checked) {
+        spanMascotaJugador.innerHTML = inputdragonite.id
+        mascotaJugadorSelecionado = inputdragonite.id
+    } else if (inputpichoto.checked) {
+        spanMascotaJugador.innerHTML = inputpichoto.id
+        mascotaJugadorSelecionado = inputpichoto.id
+
+    } else if (inputespean.checked) {
+        spanMascotaJugador.innerHTML = inputespean.id
+        mascotaJugadorSelecionado = inputespean.id
+    
+    } else if (inputgengar.checked) {
+        spanMascotaJugador.innerHTML = inputgengar.id
+        mascotaJugadorSelecionado = inputgengar.id
+    } else if (inputnewtwo.checked) {
+        spanMascotaJugador.innerHTML = inputnewtwo.id
+        mascotaJugadorSelecionado = inputnewtwo.id
+    } else if (inputtiranitar.checked) {
+        spanMascotaJugador.innerHTML = inputtiranitar.id
+        mascotaJugadorSelecionado = inputtiranitar.id
+    
+    
     } else {
         alert('Selecciona una mascota')
     }
     
     //
-    funExtraerAtaques(mascotaJugadorSelecionado);
-    //Selecciona al enemigo de forma automatica.
-    seleccionarMascotaEnemigo()
+    if(mascotaJugadorSelecionado != ""){
+        sectionSeleccionarMascota.style.display = 'none'
+        sectionSeleccionarAtaque.style.display = 'flex'
+
+        funExtraerAtaques(mascotaJugadorSelecionado);
+        //Selecciona al enemigo de forma automatica.
+        seleccionarMascotaEnemigo()
+    }
 }
 
 /*
@@ -284,14 +393,17 @@ function secuenciaAtaque(){
                 arrayAtaquesJugador.push('FUEGO')
                 console.log(arrayAtaquesJugador);
                 boton.style.background = 'orange'
+                boton.disabled = true;
             }else if (e.target.textContent === '💧'){
                 arrayAtaquesJugador.push('AGUA')
                 console.log(arrayAtaquesJugador);
                 boton.style.background = 'blue'
+                boton.disabled = true;
             }else{
                 arrayAtaquesJugador.push('TIERRA')
                 console.log(arrayAtaquesJugador);
                 boton.style.background = 'green'
+                boton.disabled = true;
             }
 
             //inicar el ataque del enemigo
@@ -449,9 +561,8 @@ function crearMensajeFinal(resultadoFinal) {
     console.log(resultadoFinal);
 
     sectionMensajes.innerHTML = resultadoFinal
-    botonFuego.disabled = true
-    botonAgua.disabled = true
-    botonTierra.disabled = true
+
+    //disabled = true
     sectionReiniciar.style.display = 'block'
 }
 
