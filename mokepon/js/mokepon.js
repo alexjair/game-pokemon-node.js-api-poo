@@ -1,3 +1,9 @@
+//canvas!!
+const vbody = document.getElementById("idbody");
+
+const sectionVerMapa = document.getElementById("ver-mapa");
+const mapa = document.getElementById("mapa");
+
 //---Declaracion de variables.
 
 const sectionSeleccionarAtaque = document.getElementById('seleccionar-ataque')
@@ -24,8 +30,14 @@ const ataquesDelEnemigo = document.getElementById('ataques-del-enemigo')
 const contenedorTarjetas = document.getElementById('contenedorTarjetas')
 const contenedorAtaques = document.getElementById('contenedorAtaques')
 
+const contenedorTarjetasGif = document.getElementById('targetas-subtitulo-gif')
+
+
+let sonido
+
 //contenedor de nuestros objetos, todos los pokemones creados. 
 let mokepones = []
+let mokeponesEnemigos = []
 let opcionDeMokepones
 
 //let arrayAtaquesJugador
@@ -64,105 +76,201 @@ let indexAtaquesEnemigo
 let victoriasJugador = 0
 let victoriasEnemigo = 0
 
+//canva
+let mascotaJugadorObjeto
+let lienzo = mapa.getContext("2d");
+let intervalo
+let mapaBackground = new Image()
+
+mapaBackground.src = './assets/mapa/'+random(1, 8)+'.jpg'
+console.log('./assets/mapa/'+random(1, 8)+'.jpg');
+//ANCHO DE PANTALLA O TRO
+let alturaQueBuscamos
+let anchoDelMapa = window.innerWidth - 20
+const anchoMaximoDelMapa = 640
+
+if (anchoDelMapa > anchoMaximoDelMapa) {
+    anchoDelMapa = anchoMaximoDelMapa -20
+}
+alturaQueBuscamos = anchoDelMapa * 600 / 800
+mapa.width = anchoDelMapa
+mapa.height = alturaQueBuscamos
+
+//node!!
+let jugadorId = null
+
 //Iniciamos la Clase de los Pokemoes
 class Mokepon {
     //variables
     //..
 
     constructor(
-        //variables
+         //variables
         nombre, 
         foto, 
-        vida
-        ) {
+        vida,
+        fotoMapa,
+        id = null,
+        tipo_mokepon = 'COMPUTER'
+    ){
+        this.id = id
         this.nombre = nombre
         this.foto = foto
         this.vida = vida
-        this.ataques =[]
+        this.ataques =[],
+        //canva!!
+        this.ancho = 55, //dimenciones
+        this.alto = 55,
+        //antiguo
+        //this.x = x, //posicion
+        //this.y = y,
+        //nuevo ramdom
+        this.x = aleatorio(0, mapa.width - this.ancho), //posicion
+        this.y = aleatorio(0, mapa.height - this.alto), //posicion
+        this.mapaFoto = new Image(),
+        this.mapaFoto.src = fotoMapa
+        this.velocidadX = 0,    
+        this.velocidadY = 0
+    }
+
+    //metodos..
+    pintarMoekpon(){
+        lienzo.drawImage(
+            this.mapaFoto,
+            this.x,
+            this.y,
+            this.ancho,
+            this.alto
+        )
     }
 }
 
 //Inicializamos los objetos, los 3 tipos de pokemon que vana jugar
-let hipodoge = new Mokepon('Hipodoge', './assets/blue_po_2_portada.png', 5)
-let capipepo = new Mokepon('Capipepo', './assets/gree_po_2_portada.png', 5)
-let ratigueya = new Mokepon('Ratigueya', './assets/fire_po_2_portada.png', 5)
+let hipodoge = new Mokepon('Hipodoge', './assets/blue_po_2_portada.png', 5 ,'./assets/gif/Hipodoge_av.gif')
+let capipepo = new Mokepon('Capipepo', './assets/gree_po_2_portada.png', 5 ,'./assets/gif/Capipepo_av.gif')
+let ratigueya = new Mokepon('Ratigueya', './assets/fire_po_2_portada.png', 5 ,'./assets/gif/Ratigueya_av.gif')
 
-let dragonite = new Mokepon('dragonite', './assets/fire_po_2_portada.png', 5)
-let pichoto = new Mokepon('pichoto', './assets/fire_po_2_portada.png', 5)
-let espean = new Mokepon('espean', './assets/fire_po_2_portada.png', 5)
+let dragonite = new Mokepon('dragonite', './assets/dragonite.png', 5 ,'./assets/gif/dragonite_av.gif')
+let pichoto = new Mokepon('pichoto', './assets/pichoto.png', 5 ,'./assets/gif/pichoto_av.gif')
+let espean = new Mokepon('espean', './assets/espeon.webp', 5 ,'./assets/gif/espean_av.gif')
 
-let gengar = new Mokepon('gengar', './assets/fire_po_2_portada.png', 5)
-let newtwo = new Mokepon('newtwo', './assets/fire_po_2_portada.png', 5)
-let tiranitar = new Mokepon('tiranitar', './assets/fire_po_2_portada.png', 5)
+let gengar = new Mokepon('gengar', './assets/gengar.webp', 5 ,'./assets/gif/gengar_av.gif')
+let newtwo = new Mokepon('newtwo', './assets/Mewtwo.webp', 5 ,'./assets/gif/newtwo_av.gif')
+let tiranitar = new Mokepon('tiranitar', './assets/Tyranitar.png', 5 ,'./assets/gif/tiranitar_av.gif')
 
-//Definiendo los arreglos en los pokemones
-hipodoge.ataques.push(
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🌱',id:'boton-tierra'},
-    )
-capipepo.ataques.push(
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-    )
-ratigueya.ataques.push(
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🌱',id:'boton-tierra'},
-    )
+//enemigo
+let hipodogeEnemigo = new Mokepon('Hipodoge', './assets/blue_po_2_portada.png', 5 ,'./assets/gif/Hipodoge_av.gif')
+let capipepoEnemigo = new Mokepon('Capipepo', './assets/gree_po_2_portada.png', 5 ,'./assets/gif/Capipepo_av.gif')
+let ratigueyaEnemigo = new Mokepon('Ratigueya', './assets/fire_po_2_portada.png', 5 ,'./assets/gif/Ratigueya_av.gif')
+
+let dragoniteEnemigo = new Mokepon('dragonite', './assets/dragonite.png', 5 ,'./assets/gif/dragonite_av.gif')
+let pichotoEnemigo = new Mokepon('pichoto', './assets/pichoto.png', 5 ,'./assets/gif/pichoto_av.gif')
+let espeanEnemigo = new Mokepon('espean', './assets/espeon.webp', 5 ,'./assets/gif/espean_av.gif')
+
+let gengarEnemigo = new Mokepon('gengar', './assets/gengar.webp', 5 ,'./assets/gif/gengar_av.gif')
+let newtwoEnemigo = new Mokepon('newtwo', './assets/Mewtwo.webp', 5 ,'./assets/gif/newtwo_av.gif')
+let tiranitarEnemigo = new Mokepon('tiranitar', './assets/Tyranitar.png', 5 ,'./assets/gif/tiranitar_av.gif')
 
 //Definiendo los arreglos en los pokemones
-dragonite.ataques.push(
+const hipodoge_ATAQUES = [
     {nombre:'💧',id:'boton-agua'},
     {nombre:'💧',id:'boton-agua'},
     {nombre:'💧',id:'boton-agua'},
     {nombre:'🔥',id:'boton-fuego'},
     {nombre:'🌱',id:'boton-tierra'},
-    )
-pichoto.ataques.push(
+]
+hipodoge.ataques.push(...hipodoge_ATAQUES)
+    
+const capipepo_ATAQUES = [
     {nombre:'🌱',id:'boton-tierra'},
     {nombre:'🌱',id:'boton-tierra'},
     {nombre:'🌱',id:'boton-tierra'},
     {nombre:'💧',id:'boton-agua'},
     {nombre:'🔥',id:'boton-fuego'},
-    )
-espean.ataques.push(
+]
+capipepo.ataques.push(...capipepo_ATAQUES)
+
+const ratigueya_ATAQUES = [
     {nombre:'🔥',id:'boton-fuego'},
     {nombre:'🔥',id:'boton-fuego'},
     {nombre:'🔥',id:'boton-fuego'},
     {nombre:'💧',id:'boton-agua'},
     {nombre:'🌱',id:'boton-tierra'},
-    )
+]
+ratigueya.ataques.push(...ratigueya_ATAQUES)
+
+//Definiendo los arreglos en los pokemones
+const dragonite_ATAQUES = [
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+]
+dragonite.ataques.push(...dragonite_ATAQUES)
+
+const pichoto_ATAQUES = [
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+]
+pichoto.ataques.push(...pichoto_ATAQUES)
+
+const espean_ATAQUES = [
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+]
+espean.ataques.push(...espean_ATAQUES)
+
+//Definiendo los arreglos en los pokemones
+const gengar_ATAQUES = [
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🌱',id:'boton-tierra'},
+]
+gengar.ataques.push(...gengar_ATAQUES)
+
+const newtwo_ATAQUES = [
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'🌱',id:'boton-tierra'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🔥',id:'boton-fuego'},
+]
+newtwo.ataques.push(...newtwo_ATAQUES)
+
+const tiranitar_ATAQUES = [
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'🔥',id:'boton-fuego'},
+    {nombre:'💧',id:'boton-agua'},
+    {nombre:'🌱',id:'boton-tierra'},
+]
+tiranitar.ataques.push(...tiranitar_ATAQUES)
+
+/********ataque enemigos*******/
+
+//Definiendo los arreglos en los pokemones
+hipodogeEnemigo.ataques.push(...hipodoge_ATAQUES)
+capipepoEnemigo.ataques.push(...capipepo_ATAQUES)
+ratigueyaEnemigo.ataques.push(...ratigueya_ATAQUES)
+
+//Definiendo los arreglos en los pokemones
+dragoniteEnemigo.ataques.push(...dragonite_ATAQUES)
+pichotoEnemigo.ataques.push(...pichoto_ATAQUES)
+espeanEnemigo.ataques.push(...espean_ATAQUES)
 
     //Definiendo los arreglos en los pokemones
-gengar.ataques.push(
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🌱',id:'boton-tierra'},
-    )
-newtwo.ataques.push(
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'🌱',id:'boton-tierra'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🔥',id:'boton-fuego'},
-    )
-tiranitar.ataques.push(
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'🔥',id:'boton-fuego'},
-    {nombre:'💧',id:'boton-agua'},
-    {nombre:'🌱',id:'boton-tierra'},
-    )
+gengarEnemigo.ataques.push(...gengar_ATAQUES)
+newtwoEnemigo.ataques.push(...newtwo_ATAQUES)
+tiranitarEnemigo.ataques.push(...tiranitar_ATAQUES)
 
 mokepones.push(
     //originales
@@ -184,11 +292,15 @@ console.log(mokepones);
 function iniciarJuego() {
     console.log("fun --> iniciarJuego()");
 
-    sectionSeleccionarAtaque.style.display = 'none'
+    sectionSeleccionarAtaque.style.display = 'none';
+    sectionVerMapa.style.display = 'none';
 
     //recorrer los pokemon creados, para mostrar en la plantalla de seleccion
     let vHtml = "";
     mokepones.forEach((mokepon) => {
+
+        let str = mokepon.nombre;
+        let name = str.charAt(0).toUpperCase() + str.slice(1);
 
         opcionDeMokepones = `
             <input 
@@ -200,7 +312,7 @@ function iniciarJuego() {
                 class="tarjeta-de-mokepon" 
                 for="${mokepon.nombre}" 
             >
-                <p>${mokepon.nombre}</p>
+                <p>${name}</p>
                 <img src="${mokepon.foto}" alt="${mokepon.nombre}">
             </label>
         `
@@ -224,6 +336,26 @@ function iniciarJuego() {
 
     botonMascotaJugador.addEventListener('click', seleccionarMascotaJugador)
     botonReiniciar.addEventListener('click', reiniciarJuego)
+
+    funUnirseAlJuego()
+}
+
+function funUnirseAlJuego() {
+    
+    fetch("http://127.0.0.1:3000/unirse")
+        .then(function (res) {
+            //Mostramos la respuesta
+            console.log(res)
+
+            //Si fue positiva
+            if(res.ok){
+                res.text()
+                .then(function (respuesta) {
+                    console.log(respuesta);
+                    jugadorId = respuesta 
+                }) 
+            }
+        })
 }
 
 /*
@@ -280,14 +412,70 @@ function seleccionarMascotaJugador() {
     
     //
     if(mascotaJugadorSelecionado != ""){
-        sectionSeleccionarMascota.style.display = 'none'
-        sectionSeleccionarAtaque.style.display = 'flex'
+        
+        //agregar id de la cabecera title
+        document.title = `${mascotaJugadorSelecionado} (Id-${jugadorId})`;
+        //console.log(vbody); 
+        //console.log(vbody.style.backgroundImage); 
 
+        document.body.style.backgroundColor = "black";
+        //document.body.style.backgroundImage = "../assets/fondo/fondodf.jpg";
+        document.body.style.backgroundImage = "url('')";
+        document.body.style.backgroundImage = "ssdtr";
+
+        sectionSeleccionarMascota.style.display = 'none'
+        
+        //desplegar mapa de canva
+        sectionVerMapa.style.display = 'flex'
+
+        //intervalo!!
+        iniciarMapa()
+
+        seleccionarMokepon(mascotaJugadorSelecionado)
+                
         funExtraerAtaques(mascotaJugadorSelecionado);
         //Selecciona al enemigo de forma automatica.
-        seleccionarMascotaEnemigo()
+        //random
+        //seleccionarMascotaEnemigo()
+
+        //reproducir el audio
+        //const sonido = cargarSonido("sonido.flac");
+        sonido = cargarSonido("assets/musica/cuidad"+random(1, 4)+".mp3");
+        sonido.play();
     }
 }
+
+/*
+function seleccionarMokepon(mokepon) {
+    fetch(`http://localhost:3000/mokepon/${jugadorId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            mokepon: mokepon
+        })
+    })
+}
+*/
+
+function seleccionarMokepon(mascotaJugadorSelecionado){
+    console.log("fun --> seleccionarMokepon(mascotaJugadorSelecionado)");
+    console.log("jugadorId: "+jugadorId);
+    console.log(`http://127.0.0.1:3000/mokepon/${jugadorId}`);
+
+    fetch(`http://127.0.0.1:3000/mokepon/${jugadorId}`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            mokepon: mascotaJugadorSelecionado
+        })
+    })
+}
+
+
 
 /*
 function seleccionarMascotaJugador() {
@@ -348,17 +536,21 @@ function mostrarAtaques(ataques){
     //botonTierra.addEventListener('click', ataqueTierra)
 }
 
-function seleccionarMascotaEnemigo() {
+function seleccionarMascotaEnemigo(enemigo) {
     console.log("fun --> seleccionarMascotaEnemigo()");
 
+    spanMascotaEnemigo.innerHTML = enemigo.nombre;
+    ataqueMokeponEnemigo = enemigo.ataques;
+    
+
     //Obentenmos el ID array del los pokemones;  
-    let mascotaAleatoria = aleatorio(0,mokepones.length - 1)
+    //let mascotaAleatoria = aleatorio(0,mokepones.length - 1)
     
     //selec. pk enemigo
-    spanMascotaEnemigo.innerHTML = mokepones[mascotaAleatoria].nombre;
+    //spanMascotaEnemigo.innerHTML = mokepones[mascotaAleatoria].nombre;
     //selec. ataques enemigo
-    ataqueMokeponEnemigo = mokepones[mascotaAleatoria].ataques;
-    console.log(ataqueMokeponEnemigo);
+    //ataqueMokeponEnemigo = mokepones[mascotaAleatoria].ataques;
+    //console.log(ataqueMokeponEnemigo);
     //llamar agregar los eventos a ataque
     secuenciaAtaque()
 }
@@ -405,6 +597,10 @@ function secuenciaAtaque(){
                 boton.style.background = 'green'
                 boton.disabled = true;
             }
+
+            sonido2 = cargarSonido("assets/ataques/atack("+random(1, 24)+").wav");
+            sonido2.play();
+            
 
             //inicar el ataque del enemigo
             ataqueAleatorioEnemigo();
@@ -574,5 +770,314 @@ function reiniciarJuego() {
 function aleatorio(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
+/**********[ Canva mober y mapa ] **************/
+
+function funPintarCanvas(){
+    //console.log("fun --> funPintarCanvas()");
+
+    mascotaJugadorObjeto.x = mascotaJugadorObjeto.x + mascotaJugadorObjeto.velocidadX    
+    mascotaJugadorObjeto.y = mascotaJugadorObjeto.y + mascotaJugadorObjeto.velocidadY  
+
+    //cambio por el canva
+    //sectionSeleccionarAtaque.style.display = 'flex'
+    
+    lienzo.clearRect(0, 0, mapa.width, mapa.height)
+
+    //mapa de fondo del juego
+    lienzo.drawImage(
+        mapaBackground,
+        0,
+        0,
+        mapa.width,
+        mapa.height
+    )
+
+    //llamada del metodo
+    mascotaJugadorObjeto.pintarMoekpon()
+
+    /*********************inicio*/
+    //enviar X Y la posicion 
+    funEnviarPosicionXY(mascotaJugadorObjeto.x, mascotaJugadorObjeto.y)
+
+    /*********************fin*/
+    
+    //pintar enemigo
+    hipodogeEnemigo.pintarMoekpon()
+    capipepoEnemigo.pintarMoekpon()
+    ratigueyaEnemigo.pintarMoekpon()
+
+    dragoniteEnemigo.pintarMoekpon()
+    pichotoEnemigo.pintarMoekpon()
+    espeanEnemigo.pintarMoekpon()
+
+    gengarEnemigo.pintarMoekpon()
+    newtwoEnemigo.pintarMoekpon()
+    tiranitarEnemigo.pintarMoekpon()
+
+    mokeponesEnemigos.forEach( function (mokepon){
+        if(mokepon != undefined){
+            mokepon.pintarMoekpon()
+            revisarColision(mokepon);
+        }
+    })
+
+    //revisar colicion si se esta moviendo
+    if (
+        mascotaJugadorObjeto.velocidadX !== 0 ||
+        mascotaJugadorObjeto.velocidadY !== 0
+    ){
+        revisarColision(hipodogeEnemigo);
+        revisarColision(capipepoEnemigo);
+        revisarColision(ratigueyaEnemigo);
+
+        revisarColision(dragoniteEnemigo);
+        revisarColision(pichotoEnemigo);
+        revisarColision(espeanEnemigo);
+
+        revisarColision(gengarEnemigo);
+        revisarColision(newtwoEnemigo);
+        revisarColision(tiranitarEnemigo);
+    }
+
+    //let imagenDeCapipeto = new Image();
+    //imagenDeCapipeto.src = capipepo.foto
+    
+    //rectangulo!!
+    //lienzo.fillRect(5,15,20,40)
+    //cara pokemons
+}
+
+/*
+<button onclick="funMoverArriba()">Arriba</button>
+<button onclick="funMoverIzquierda()">Izquierda</button>
+<button onclick="funMoverAbajo()">Abajo</button>
+<button onclick="funMoverDerecha()">Derecha</button>
+*/
+
+function funEnviarPosicionXY(x, y){
+    console.log("fun --> funEnviarPosicionXY(x, y)");
+    //console.log("jugadorId: "+jugadorId);
+    //console.log(`http://127.0.0.1:3000/mokepon/${jugadorId}/posicion`);
+
+    fetch(`http://127.0.0.1:3000/mokepon/${jugadorId}/posicion`, {
+        method: "post",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            x: x,
+            y: y
+        })
+        
+    })
+    .then(function (res) {
+        if(res.ok){
+          res.json()
+              .then(function ({arrayEnemigos}){
+                  //console.log(arrayEnemigos);
+                  //console.log({arrayEnemigos});
+                  
+                  //EVITAR PARPADEO CAMBIO POR MAP
+                  //arrayEnemigos.forEach(function (multijugador){
+                  mokeponesEnemigos = arrayEnemigos.map(function (multijugador){
+                        let multijugadorPokemon = null
+                        
+                        if(multijugador.mokepon != undefined)
+                        {
+                            const mokeponNombre = multijugador.mokepon.nombre || ""
+
+                            //unicar pokemons
+                            if (mokeponNombre === "Hipodoge"){
+                                multijugadorPokemon = new Mokepon('Hipodoge', './assets/blue_po_2_portada.png', 5 ,'./assets/gif/Hipodoge_av.gif')
+                            }else if(mokeponNombre === "Capipepo"){
+                                multijugadorPokemon = new Mokepon('Capipepo', './assets/gree_po_2_portada.png', 5 ,'./assets/gif/Capipepo_av.gif')
+                            }else if(mokeponNombre === "Ratigueya"){
+                                multijugadorPokemon = new Mokepon('Ratigueya', './assets/fire_po_2_portada.png', 5 ,'./assets/gif/Ratigueya_av.gif')
+                            }else if(mokeponNombre === "dragonite"){
+                                multijugadorPokemon = new Mokepon('dragonite', './assets/dragonite.png', 5 ,'./assets/gif/dragonite_av.gif')
+                            }else if(mokeponNombre === "pichoto"){
+                                multijugadorPokemon = new Mokepon('pichoto', './assets/pichoto.png', 5 ,'./assets/gif/pichoto_av.gif')
+                            }else if(mokeponNombre === "espean"){
+                                multijugadorPokemon = new Mokepon('espean', './assets/espeon.webp', 5 ,'./assets/gif/espean_av.gif')
+                            }else if(mokeponNombre === "gengar"){
+                                multijugadorPokemon = new Mokepon('gengar', './assets/gengar.webp', 5 ,'./assets/gif/gengar_av.gif')
+                            }else if(mokeponNombre === "newtwo"){
+                                multijugadorPokemon = new Mokepon('newtwo', './assets/Mewtwo.webp', 5 ,'./assets/gif/newtwo_av.gif')
+                            }else if(mokeponNombre === "tiranitar"){
+                                multijugadorPokemon = new Mokepon('tiranitar', './assets/Tyranitar.png', 5 ,'./assets/gif/tiranitar_av.gif')
+                            }
+
+                            multijugadorPokemon.x  = multijugador.x
+                            multijugadorPokemon.y  = multijugador.y
+                        }
+                        
+                        return multijugadorPokemon
+                        //multijugadorPokemon.pintarMoekpon()
+
+                    })
+              })
+        }  
+    })
+}
+
+function funMoverArriba(){
+    //console.log("fun --> funMoverArriba()");
+    mascotaJugadorObjeto.velocidadY = -5;    
+
+    /*
+    capipepo.y = capipepo.y - 5
+    //console.log(capipepo);
+    console.log(capipepo.y);
+    funPintarCanvas()
+    */
+}
+
+function funMoverAbajo(){
+    //console.log("fun --> funMoverAbajo()");
+    mascotaJugadorObjeto.velocidadY = +5;    
+
+    /*
+    capipepo.y = capipepo.y + 5
+    //console.log(capipepo);
+    console.log(capipepo.y);
+    funPintarCanvas()
+    */
+   
+}
+
+function funMoverIzquierda(){
+    //console.log("fun --> funMoverIzquierda()");
+    mascotaJugadorObjeto.velocidadX = -5;    
+    /*
+    capipepo.x = capipepo.x - 5
+    //console.log(capipepo);
+    console.log(capipepo.x);
+    funPintarCanvas()
+    */
+}
+
+function funMoverDerecha(){
+    //console.log("fun --> funMoverDerecha()");
+
+    mascotaJugadorObjeto.velocidadX = 5;
+
+    /*
+    capipepo.x = capipepo.x + 5
+    //console.log(capipepo);
+    console.log(capipepo.x);
+    funPintarCanvas()
+    */
+}
+
+function funDetenerMovimeinto(){
+    mascotaJugadorObjeto.velocidadX = 0;
+    mascotaJugadorObjeto.velocidadY = 0;
+}
+
+function sePrecionoUnaTecla(event){
+    //console.log(event);
+    switch (event.key) {
+        case 'ArrowUp':
+            funMoverArriba()
+            break;
+        case 'ArrowDown':
+            funMoverAbajo()
+            break;
+        case 'ArrowLeft':
+            funMoverIzquierda()
+            break;
+        case 'ArrowRight':
+            funMoverDerecha()
+            break;
+        default:
+            break;
+    }
+}
+
+function iniciarMapa(){
+    //mapa.width = 700
+    //mapa.height = 520
+
+    mascotaJugadorObjeto = obtenerObjMascota(mascotaJugadorSelecionado) 
+    intervalo = setInterval(funPintarCanvas, 50);
+
+    //Eventos teclado
+    window.addEventListener("keydown", sePrecionoUnaTecla)
+    window.addEventListener("keyup", funDetenerMovimeinto)
+}
+
+function obtenerObjMascota(){
+    for (let i = 0; i < mokepones.length; i++) {
+        if(mascotaJugadorSelecionado === mokepones[i].nombre){
+            return mokepones[i]
+        }
+    }
+}
+
+function revisarColision(enemigo){
+
+    const arribaEnemigo = enemigo.y
+    const abajoEnemigo = enemigo.y + enemigo.alto
+    const derechaEnemigo = enemigo.x + enemigo.ancho
+    const izquierdaEnemigo = enemigo.x
+    
+    const arribaMascota = mascotaJugadorObjeto.y
+    const abajoMascota = mascotaJugadorObjeto.y + mascotaJugadorObjeto.alto
+    const derechaMascota = mascotaJugadorObjeto.x + mascotaJugadorObjeto.ancho
+    const izquierdaMascota = mascotaJugadorObjeto.x
+        
+    if (
+        abajoMascota < arribaEnemigo ||
+        arribaMascota > abajoEnemigo ||
+        derechaMascota < izquierdaEnemigo ||
+        izquierdaMascota > derechaEnemigo 
+    ) {
+        //console.log("-->libre!");
+        return
+    }
+
+    let num = random(1,30);
+    
+    if( num == 7 ){
+        console.log("--> EMPIEZA LA BATALLA!");
+        let isExecuted = confirm("Encontrastes un "+(enemigo.nombre).toUpperCase()+" salvaje dormido..., el "+enemigo.nombre+" se a despertado!! y a empezado a atacarte...\n\n Si quieres defenderte preciona \"ACEPTAR\" para luchar o vas a \" HUIR \" preciona Cancelar.Vas a huir...???");
+        funDetenerMovimeinto();
+                    
+        if(isExecuted){
+            sonido.pause();
+            sonido = cargarSonido("assets/batalla/batalla"+random(1, 5)+".mp3");
+            sonido.play();
+            console.log(isExecuted); // OK = true, Cancel = false
+            clearInterval(intervalo);
+            sectionSeleccionarAtaque.style.display = 'flex'
+            sectionVerMapa.style.display = 'none'
+            seleccionarMascotaEnemigo(enemigo)
+            
+            let htmlgif = opcionDeMokepones = `
+                    <img src="assets/gif/${mascotaJugadorObjeto.nombre}_av.gif" title="${mascotaJugadorObjeto.nombre}" height="110">
+                    <img src="assets/vs/vs.png" height="110">
+                    <img src="assets/gif/${enemigo.nombre}_av.gif" title="${enemigo.nombre}" height="110">
+            `
+            contenedorTarjetasGif.innerHTML = htmlgif
+        }
+    }else{
+        console.log("Te encontrastes con "+ enemigo.nombre+" !!.. parece dormido. ("+num+")");
+    }
+}
+
+function random(min, max) {
+    return Math.floor((Math.random() * (max - min + 1)) + min);
+}
+
+const cargarSonido = function (fuente) {
+    const sonido = document.createElement("audio");
+    sonido.src = fuente;
+    sonido.setAttribute("preload", "auto");
+    sonido.setAttribute("controls", "none");
+    sonido.style.display = "none"; // <-- oculto
+    document.body.appendChild(sonido);
+    return sonido;
+};
 
 window.addEventListener('load', iniciarJuego)

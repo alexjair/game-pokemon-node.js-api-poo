@@ -1,0 +1,15 @@
+{
+  "name": "mokepon",
+  "version": "1.0.0",
+  "description": "Proyecto de Juego/Game de Pokepon (Monchis) en Node y canva",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alexander Jair Rojas Paria",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  }
+}

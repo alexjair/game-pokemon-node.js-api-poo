@@ -3,12 +3,20 @@
 body {
   font-family: 'Poppins', sans-serif;
   /*background-color: #0a7997;*/
-  background-image: url("../mokepon/img/bg-fondo.png");
+  background-image: url("./img/bg-fondo2.png");
   /*background-position: center center;*/
 
   /*background-position: center;
   background-repeat: no-repeat;*/
   background-size: 100% ;
+}
+
+#subtitulo-gif{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 #seleccionar-mascota {
@@ -18,19 +26,41 @@ body {
   align-items: center;
 }
 
-.titulo {
+#seleccionar-mascota button {
+  cursor: pointer;
+  background-color: #e91e03;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  border-color: transparent;
+  /* width: 180px; */
+  width: 130px;
+  height: 40px;
   color: white;
-  font-size: 32px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 15px;
+  margin: 5px;
+  border: solid 0.2em rgb(79, 190, 227);
+  /*border-bottom-color: red;*/
+}
+
+.titulo {
+  color: #85dd65b4;
+  font-size: 57px;
   font-family: 'Fredoka One', cursive;
 }
 
 .subtitulo {
-  color: white;
-  font-size: 20px;
+  color: rgb(67, 159, 173);
+  font-size: 25px;
+  font-weight: bold;
 }
 
 .tarjetas, .tarjetas-ataques {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
 }
 
@@ -122,8 +152,44 @@ input:checked + label {
   align-items: center;
 }
 
-@media (max-width: 360px) {
+#ver-mapa {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#ver-mapa button{
+  background-color: #11468F;
+  padding: 5px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  border-color: transparent;
+  /* width: 180px; */
+  width: 100px;
+  height: 32px;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  margin: 5px;
+  border: solid 0.2em rgb(79, 190, 227);
+  /*border-bottom-color: red;*/
+}
+
+
+/*******************[ Canva]****************************/
+#mapa {
+  border: 2px solid white;
+}
+
+@media (max-width: 560px) {
   .tarjetas, .tarjetas-ataques {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  #ver-mapa div {
+  display : flex;
+  align-items: center;
+  flex-direction: column;
   }
 }
